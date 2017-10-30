@@ -2,6 +2,8 @@
 
 REST Service for MongoDB
 
+## Routes
+
 | Method | Path              | Description
 | -----: | ----------------- | ---
 |   POST | `/collection`     | Create a new item

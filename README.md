@@ -2,6 +2,10 @@
 
 REST Service for MongoDB
 
+[![Build Status](https://travis-ci.org/jamestalton/node-mongo-rest-service.svg?branch=master)](https://travis-ci.org/jamestalton/node-mongo-rest-service)
+
+Work in progress... all routes work, but still figuring out the best way to add authentication.
+
 ## Routes
 
 | Method | Path              | Description

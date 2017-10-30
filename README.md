@@ -6,51 +6,47 @@ REST Service for MongoDB
 
 Work in progress... all routes work, but still figuring out the best way to add authentication.
 
+## Quickstart
+
+Clone this repository, then run:
+
+``` bash
+MONGO_CONNECTION_STRING="mongodb://localhost:27017/database" PORT=3000 LOGGER_ENABLED=true npm start
+```
+
+Then going to http://localhost:3000/things?limit=1 will return an array "things" from the MongoDB collection "things".
+
 ## Routes
 
-| Method | Path              | Description
-| -----: | ----------------- | ---
-|   POST | `/collection`     | Create a new item
-|    GET | `/collection`     | Query collection items
-|    GET | `/collection/:id` | Get an item
-|    PUT | `/collection`     | Replace collection items
-|    PUT | `/collection/:id` | Replace an item
-|  PATCH | `/collection`     | Update collection items
-|  PATCH | `/collection/:id` | Update an item
-| DELETE | `/collection`     | Delete collection items
-| DELETE | `/collection/:id` | Delete an item
-
-## Route Query String Support
-
-| Method | Path              | Query String
-| -----: | ----------------- | ---
-|   POST | `/collection`     |
-|    GET | `/collection`     | filter, sort, limit, skip, fields
-|    GET | `/collection/:id` | fields
-|    PUT | `/collection`     | filter
-|    PUT | `/collection/:id` |
-|  PATCH | `/collection`     | filter
-|  PATCH | `/collection/:id` |
-| DELETE | `/collection`     | filter
-| DELETE | `/collection/:id` |
+| Method | Path              | Description              | Query String Support
+| -----: | ----------------- | ------------------------ | ---
+|   POST | `/collection`     | Create a new item        |
+|    GET | `/collection`     | Query collection items   | `filter, sort, limit, skip, fields`
+|    GET | `/collection/:id` | Get an item              | `fields`
+|    PUT | `/collection`     | Replace collection items | `filter`
+|    PUT | `/collection/:id` | Replace an item          |
+|  PATCH | `/collection`     | Update collection items  | `filter`
+|  PATCH | `/collection/:id` | Update an item           |
+| DELETE | `/collection`     | Delete collection items  | `filter`
+| DELETE | `/collection/:id` | Delete an item           |
 
 ## Query String Filtering
 
-|                Operation | Query String    | Mongo Query
-| -----------------------: | --------------- | -----------
-|                   equals | `?foo=bar`      | {foo:"bar"}
-|           does not equal | `?foo!=bar`     | {foo:{$ne:"bar"}}
-|                   exists | `?foo!=`        | {foo:{$exists:true}}
-|           does not exist | `?foo=`         | {foo:{$exists:false}}
-|             greater than | `?foo>10`       | {foo:{$gt:10}}
-|                less than | `?foo<10`       | {foo:{$lt:10}}
-| greater than or equal to | `?foo>=10`      | {foo:{$gte:10}}
-|    less than or equal to | `?foo<=10`      | {foo:{$lte:10}}
-|                 contains | `?foo~=bar`     | {foo:{$regex:"bar",$options:"i"}}
-|              starts with | `?foo^=bar`     | {foo:{$regex:"^bar",$options:"i"}}
-|                ends with | `?foo$=bar`     | {foo:{$regex:"bar$",$options:"i"}}
-|                 in array | `?foo=bar,baz`  | {foo:{$in:['bar','baz']}}
-|             not in array | `?foo!=bar,baz` | {foo:{$nin:['bar','baz']}}
+|                Operation | Query String      | Mongo Query
+| -----------------------: | ----------------- | -----------
+|                   equals | `?foo=bar`        | { foo: "bar" }
+|           does not equal | `?foo!=bar`       | { foo: { $ne: "bar" } }
+|                   exists | `?foo!=`          | { foo: { $exists: true } }
+|           does not exist | `?foo=`           | { foo: { $exists: false } }
+|             greater than | `?foo>10:number`  | { foo: { $gt: 10 } }
+|                less than | `?foo<10:number`  | { foo: { $lt: 10 } }
+| greater than or equal to | `?foo>=10:number` | { foo: { $gte: 10 } }
+|    less than or equal to | `?foo<=10:number` | { foo: { $lte: 10 } }
+|                 contains | `?foo~=bar`       | { foo: { $regex: "bar", $options:"i" } }
+|              starts with | `?foo^=bar`       | { foo: { $regex: "^bar", $options:"i" } }
+|                ends with | `?foo$=bar`       | { foo: { $regex: "bar$", $options:"i" } }
+|                 in array | `?foo=bar,baz`    | { foo: { $in: ['bar', 'baz'] } }
+|             not in array | `?foo!=bar,baz`   | { foo: { $nin: ['bar', 'baz'] } }
 
 ## Filter Value Formatters
 
@@ -61,11 +57,12 @@ Work in progress... all routes work, but still figuring out the best way to add 
 
 ## Query String Options
 
-|   Option | Description
-| -------: | ---
-|    limit | Limit the number of items returned
-|     skip | Skip the given number of items
-|   fields | Return only specified fields
+|   Option | Description | Example
+| -------: | --- | ---
+|    `limit` | Limit the number of items returned | `?limit=10`
+|     `skip` | Skip the given number of items | `?skip=10`
+|     `sort` | Sort the items returned | `?sort=name,-description,age`
+|   `fields` | Return only specified fields | `?fields=name,description`
 
 ## NPM Commands
 
@@ -85,5 +82,5 @@ Work in progress... all routes work, but still figuring out the best way to add 
 | `LOGGER_ENABLED` | Turn on basic logging - not for production use
 
 ``` bash
-MONGO_CONNECTION_STRING="mongodb://localhost:27017/database" PORT=8080 LOGGER_ENABLED=true npm start
+MONGO_CONNECTION_STRING="mongodb://localhost:27017/database" PORT=3000 LOGGER_ENABLED=true npm start
 ```

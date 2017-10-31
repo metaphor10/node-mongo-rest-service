@@ -13,5 +13,5 @@ script:
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push jtalton/node-mongo-rest-server;
+    docker push "jtalton/node-mongo-rest-service";
     fi

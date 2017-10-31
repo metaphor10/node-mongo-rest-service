@@ -1,20 +1,30 @@
-# node-mongo-rest-service
+# node-mongo-rest-service [![Build Status](https://travis-ci.org/jamestalton/node-mongo-rest-service.svg?branch=master)](https://travis-ci.org/jamestalton/node-mongo-rest-service)
 
 REST Service for MongoDB
 
-[![Build Status](https://travis-ci.org/jamestalton/node-mongo-rest-service.svg?branch=master)](https://travis-ci.org/jamestalton/node-mongo-rest-service)
+The goal of this project is to provide a robust REST API for a Mongo database.
 
-Work in progress... all routes work, but still figuring out the best way to add authentication.
+**WARNING**: Alpha - Work in progress. The API may change going forward in subtle ways until we declare a stable release.
 
-## Quickstart
+## Docker
 
-Clone this repository, then run:
+A Docker image of this project is available as [jtalton/node-mongo-rest-service](https://hub.docker.com/r/jtalton/node-mongo-rest-service/).
+
+If you have [Docker](https://www.docker.com) setup, you can start a Mongo container and then a Mongo-Rest container linking it to Mongo.
+
+Once setup, http://localhost:3000/things?limit=1 should return an array "things" from the MongoDB collection "things".
+
+### Mongo
 
 ``` bash
-MONGO_CONNECTION_STRING="mongodb://localhost:27017/database" PORT=3000 LOGGER_ENABLED=true npm start
+docker run --name mongo -p 27017:27017 -v /somewhere/onmyhost/mydatabase:/data/db -d --restart always mvertes/alpine-mongo
 ```
 
-Then going to http://localhost:3000/things?limit=1 will return an array "things" from the MongoDB collection "things".
+### Mongo Rest
+
+``` bash
+docker run --name mongo-rest -p 3000:3000 --link mongo:mongo -e MONGO_CONNECTION_STRING="mongodb://mongo:27017/database" -d --restart always jtalton/node-mongo-rest-service
+```
 
 ## Routes
 
@@ -64,7 +74,23 @@ Then going to http://localhost:3000/things?limit=1 will return an array "things"
 |     `sort` | Sort the items returned | `?sort=name,-description,age`
 |   `fields` | Return only specified fields | `?fields=name,description`
 
-## NPM Commands
+## Development
+
+node-mongo-rest-server is written in JavaScript and run using [NodeJS](https://nodejs.org).
+
+### Running locally
+
+1. Make sure you have NodeJS installed.
+1. Have Mongo running and know your MONGO_CONNECTION_STRING.
+1. Clone the repository.
+1. Install dependencies.
+1. Start the service passing in MONGO_CONNECTION_STRING and optionally PORT.
+
+``` bash
+MONGO_CONNECTION_STRING="mongodb://localhost:27017/database" PORT=3000 LOGGER_ENABLED=true npm start
+```
+
+### NPM Commands
 
 |  Command | Description
 | ------: | ---
@@ -73,14 +99,10 @@ Then going to http://localhost:3000/things?limit=1 will return an array "things"
 | `npm test` | Run tests
 | `npm run watch` | Start the service in debug mode
 
-## Environment Variables
+### Environment Variables
 
 |  Command | Description
 | ------: | ---
 | `MONGO_CONNECTION_STRING` | The connection string for MongoDB
 | `PORT` | Port to run the service on
-| `LOGGER_ENABLED` | Turn on basic logging - not for production use
-
-``` bash
-MONGO_CONNECTION_STRING="mongodb://localhost:27017/database" PORT=3000 LOGGER_ENABLED=true npm start
-```
+| `LOGGER_ENABLED` | Turn on basic logging - not for production use - yet...
